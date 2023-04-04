@@ -1,6 +1,7 @@
 package data
 
 import com.google.common.truth.Truth.assertThat
+import model.StationCode
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -22,8 +23,7 @@ internal class StationRepositoryImplTest {
 
     @Test
     fun `getAllStations returns all stations that have been added`() {
-        stationRepository.addStation("Station 1")
-        stationRepository.addStation("Station 2")
+        stationRepository.addStations("Station 1", "Station 2")
 
         val stations = stationRepository.getAllStations()
 
@@ -48,5 +48,27 @@ internal class StationRepositoryImplTest {
         }
 
         assertThat(exception.message).isEqualTo("Station with name Station 1 already exists")
+    }
+
+    @Test
+    fun `removeStation throws IllegalArgumentException when station does not exist`() {
+        val exception = assertThrows<IllegalArgumentException> {
+            stationRepository.removeStation(StationCode("STN1"))
+        }
+
+        assertThat(exception.message).isEqualTo("Station with code STN1 does not exist")
+    }
+
+    @Test
+    fun `removeStation removes station when station exists`() {
+        stationRepository.addStations("Station 1", "Station 2")
+
+        val firstStation = stationRepository.getAllStations().first()
+        stationRepository.removeStation(firstStation.code)
+
+        val stations = stationRepository.getAllStations()
+
+        assertThat(stations).hasSize(1)
+        assertThat(stations.first().name).isEqualTo("Station 2")
     }
 }

@@ -3,6 +3,7 @@ package data
 import core.util.generateUniqueStationCode
 import domain.StationRepository
 import model.Station
+import model.StationCode
 
 class StationRepositoryImpl : StationRepository {
     private val stations = mutableListOf<Station>()
@@ -19,5 +20,15 @@ class StationRepositoryImpl : StationRepository {
         val station = Station(code, name)
 
         stations.add(station)
+    }
+
+    override fun removeStation(code: StationCode) {
+        // Check if station exists
+        val station = stations.find { it.code == code }
+            ?: throw IllegalArgumentException("Station with code $code does not exist")
+
+        // TODO: Check if station has connections
+
+        stations.remove(station)
     }
 }
