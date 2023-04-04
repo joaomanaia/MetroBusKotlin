@@ -12,6 +12,12 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+
+    // Google truth
+    testImplementation("com.google.truth:truth:1.1.3")
+
+    // Mockk
+    testImplementation("io.mockk:mockk:1.12.0")
 }
 
 tasks.test {
